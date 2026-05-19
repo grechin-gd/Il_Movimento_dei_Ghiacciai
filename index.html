@@ -1,370 +1,598 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>A-68: Il Gigante di Ghiaccio</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A-68 — Il Movimento dei Ghiacciai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      scroll-behavior:smooth;
+    :root {
+      --ice: #c8e8f5;
+      --deep: #0a1628;
+      --ocean: #0d3b6e;
+      --frost: #e8f4fb;
+      --accent: #4ab3e8;
+      --danger: #e85d3a;
+      --text: #d0e8f5;
+      --muted: #7aa8c4;
     }
 
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      background:#08131f;
-      color:white;
-      line-height:1.7;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
     }
 
-    header{
-      height:100vh;
-      background:
-      linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.7)),
-      url('https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/12/iceberg_on_collision_course_with_south_georgia/22516027-1-eng-GB/Iceberg_on_collision_course_with_South_Georgia_pillars.jpg')
-      center/cover no-repeat;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:20px;
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(10,22,40,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(74,179,232,0.15);
+    }
+    nav .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--ice); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-img {
+      position: absolute; inset: 0;
+      background-image: url('https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2021/02/a-68_journey/22536156-1-eng-GB/A-68_journey_pillars.jpg');
+      background-size: cover; background-position: center;
+      transform: scale(1.05);
+      animation: slowzoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes slowzoom {
+      from { transform: scale(1.05); }
+      to   { transform: scale(1.12); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,22,40,1) 0%, rgba(10,22,40,0.5) 50%, rgba(10,22,40,0.2) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 4rem 6rem;
+      max-width: 900px;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.35rem 0.9rem;
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadein 1s 0.3s forwards;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      color: #fff;
+      opacity: 0; animation: fadein 1s 0.6s forwards;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero-sub {
+      font-size: 1.1rem; font-weight: 300;
+      color: var(--muted); max-width: 560px;
+      margin-top: 1.5rem; line-height: 1.7;
+      opacity: 0; animation: fadein 1s 0.9s forwards;
+    }
+    @keyframes fadein { to { opacity: 1; } }
+
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.5rem; color: var(--muted); font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint::after {
+      content: '↓'; font-size: 1.2rem; color: var(--accent);
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(6px); }
     }
 
-    header h1{
-      font-size:4rem;
-      margin-bottom:20px;
-      text-shadow:2px 2px 10px black;
+    /* SECTIONS */
+    section {
+      max-width: 1100px; margin: 0 auto;
+      padding: 6rem 3rem;
     }
 
-    header p{
-      font-size:1.4rem;
-      max-width:900px;
-      margin:auto;
+    .section-label {
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; color: #fff;
+      line-height: 1.2; margin-bottom: 1.5rem;
+    }
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--ice);
+      margin-bottom: 0.8rem;
+    }
+    p {
+      color: var(--muted); line-height: 1.85;
+      font-size: 0.98rem; margin-bottom: 1rem;
     }
 
-    nav{
-      position:sticky;
-      top:0;
-      background:#0d1b2a;
-      padding:15px;
-      z-index:1000;
-      box-shadow:0 2px 10px rgba(0,0,0,0.5);
+    /* DIVIDER */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+      opacity: 0.3; margin: 0 auto;
     }
 
-    nav ul{
-      display:flex;
-      justify-content:center;
-      list-style:none;
-      flex-wrap:wrap;
-      gap:20px;
+    /* STAT BAR */
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2px; background: rgba(74,179,232,0.1);
+      border: 1px solid rgba(74,179,232,0.2);
+      border-radius: 4px; overflow: hidden;
+      margin: 4rem 3rem;
+    }
+    .stat {
+      padding: 2.5rem 2rem;
+      background: rgba(10,22,40,0.8);
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem; font-weight: 900;
+      color: var(--accent); line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-top: 0.5rem;
     }
 
-    nav a{
-      color:white;
-      text-decoration:none;
-      font-weight:bold;
-      transition:0.3s;
+    /* FULL-BLEED IMAGE */
+    .full-img {
+      width: 100%; height: 480px;
+      object-fit: cover; display: block;
+      border-top: 1px solid rgba(74,179,232,0.15);
+      border-bottom: 1px solid rgba(74,179,232,0.15);
+    }
+    .img-caption {
+      text-align: center; font-size: 0.72rem;
+      letter-spacing: 0.1em; color: var(--muted);
+      padding: 0.8rem 3rem; background: rgba(74,179,232,0.04);
     }
 
-    nav a:hover{
-      color:#7fd7ff;
+    /* TWO COL */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .two-col.reverse { direction: rtl; }
+    .two-col.reverse > * { direction: ltr; }
+    .two-col img {
+      width: 100%; height: 320px; object-fit: cover;
+      border-radius: 2px;
+      border: 1px solid rgba(74,179,232,0.2);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
 
-    section{
-      padding:80px 10%;
+    /* TIMELINE */
+    .timeline { position: relative; padding-left: 2.5rem; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px; background: rgba(74,179,232,0.3);
+    }
+    .timeline-item {
+      position: relative; margin-bottom: 3rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute; left: -2.5rem; top: 0.4rem;
+      width: 8px; height: 8px;
+      border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+    .timeline-date {
+      font-size: 0.72rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.3rem;
     }
 
-    h2{
-      font-size:2.5rem;
-      margin-bottom:30px;
-      color:#7fd7ff;
+    /* CARDS */
+    .cards {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(74,179,232,0.12);
+      padding: 2rem; border-radius: 2px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(74,179,232,0.4);
+      background: rgba(74,179,232,0.05);
+    }
+    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .card.danger { border-color: rgba(232,93,58,0.2); }
+    .card.danger:hover { border-color: rgba(232,93,58,0.5); background: rgba(232,93,58,0.04); }
+    .card.danger .card-icon::after { color: var(--danger); }
+
+    /* QUOTE */
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 1.5rem 2rem;
+      margin: 3rem 0;
+      background: rgba(74,179,232,0.05);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--ice);
+      line-height: 1.6; font-style: italic;
     }
 
-    .content{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:40px;
-      align-items:center;
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 4rem 3rem;
+      border-top: 1px solid rgba(74,179,232,0.1);
+      color: var(--muted); font-size: 0.78rem;
+      letter-spacing: 0.05em;
     }
+    footer a { color: var(--accent); text-decoration: none; }
 
-    .content img{
-      width:100%;
-      border-radius:18px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .card{
-      background:#10243b;
-      padding:30px;
-      border-radius:20px;
-      margin-top:30px;
-      box-shadow:0 10px 20px rgba(0,0,0,0.4);
-    }
-
-    ul{
-      margin-left:20px;
-      margin-top:15px;
-    }
-
-    footer{
-      text-align:center;
-      padding:40px;
-      background:#050b12;
-      font-size:0.9rem;
-      color:#b5c7d8;
-    }
-
-    .timeline{
-      border-left:4px solid #7fd7ff;
-      padding-left:30px;
-      margin-top:40px;
-    }
-
-    .timeline div{
-      margin-bottom:30px;
-    }
-
-    .timeline h3{
-      color:#7fd7ff;
-    }
-
-    @media(max-width:900px){
-      .content{
-        grid-template-columns:1fr;
-      }
-
-      header h1{
-        font-size:2.8rem;
-      }
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .hero-content { padding: 0 2rem 5rem; }
+      section { padding: 4rem 1.5rem; }
+      .two-col { grid-template-columns: 1fr; gap: 2rem; }
+      .two-col.reverse { direction: ltr; }
+      .stats { margin: 4rem 1.5rem; }
     }
   </style>
 </head>
-
 <body>
 
-<header>
-  <div>
-    <h1>A-68: Il Gigante di Ghiaccio</h1>
-    <p>
-      La storia dell’enorme iceberg A-68, uno dei più grandi mai osservati,
-      nato in Antartide e monitorato dai satelliti dell’Agenzia Spaziale Europea (ESA).
-    </p>
-  </div>
-</header>
-
+<!-- NAV -->
 <nav>
+  <div class="logo">A-68 &mdash; Il Ghiacciaio</div>
   <ul>
-    <li><a href="#cos-e">Cos'è</a></li>
+    <li><a href="#cosa">Cos'è successo</a></li>
     <li><a href="#cause">Cause</a></li>
-    <li><a href="#danni">Danni Ambientali</a></li>
+    <li><a href="#viaggio">Il Viaggio</a></li>
+    <li><a href="#danni">Danni</a></li>
     <li><a href="#vittime">Vittime</a></li>
     <li><a href="#effetti">Effetti</a></li>
-    <li><a href="#cronologia">Cronologia</a></li>
   </ul>
 </nav>
 
-<section id="cos-e">
-  <h2>Cos'è successo?</h2>
-
-  <div class="content">
-    <div>
-      <p>
-        Nel luglio 2017 un enorme blocco di ghiaccio si è staccato dalla piattaforma
-        glaciale Larsen C in Antartide. Questo iceberg è stato chiamato <strong>A-68</strong>.
-      </p>
-
-      <p>
-        Era grande circa <strong>5800 km²</strong>, più del doppio del Lussemburgo,
-        ed è diventato uno dei più grandi iceberg mai registrati.
-      </p>
-
-      <p>
-        Negli anni successivi l’iceberg si è mosso nell’Oceano Atlantico meridionale,
-        avvicinandosi pericolosamente all’isola della Georgia del Sud.
-      </p>
-    </div>
-
-    <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/7/a-68a_in_open_waters/22138931-1-eng-GB/A-68A_in_open_waters_pillars.jpg" alt="Iceberg A-68">
-  </div>
-
-  <div class="card">
-    <p>
-      I satelliti Copernicus Sentinel dell’ESA hanno monitorato continuamente
-      il viaggio dell’iceberg attraverso immagini radar e ottiche.
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Antartide — 2017/2021</div>
+    <h1>L'iceberg<br><span>A-68</span></h1>
+    <p class="hero-sub">
+      Nel luglio 2017 uno dei più grandi iceberg mai registrati si stacca dall'Antartide. 
+      Inizia un viaggio di 4 anni attraverso l'Oceano Australe che minaccerà 
+      un intero ecosistema insulare.
     </p>
   </div>
+  <div class="scroll-hint">Scorri</div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">5.800</div>
+    <div class="stat-label">km² di superficie</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">2×</div>
+    <div class="stat-label">le dimensioni del Lussemburgo</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4</div>
+    <div class="stat-label">anni di deriva</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">1.050</div>
+    <div class="stat-label">km percorsi</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">200 m</div>
+    <div class="stat-label">spessore del ghiaccio</div>
+  </div>
+</div>
+
+<!-- COSA È SUCCESSO -->
+<section id="cosa">
+  <div class="section-label">01 — Cos'è successo</div>
+  <h2>La nascita di un colosso</h2>
+  <div class="two-col">
+    <div>
+      <p>
+        Il <strong style="color:var(--ice)">12 luglio 2017</strong>, dopo mesi di monitoraggio via satellite da parte dell'ESA 
+        con le missioni Copernicus Sentinel, uno dei più grandi iceberg mai registrati 
+        nella storia si è staccato dalla piattaforma glaciale <strong style="color:var(--ice)">Larsen C</strong> in Antartide.
+      </p>
+      <p>
+        Il blocco di ghiaccio, denominato <strong style="color:var(--accent)">A-68A</strong>, aveva una superficie di circa 
+        5.800 km², equivalente a più del doppio del Lussemburgo, e uno spessore 
+        stimato di circa 200 metri. La sua massa totale era di circa un trilione di tonnellate.
+      </p>
+      <p>
+        Il distacco — tecnicamente chiamato <em>calving</em> — è avvenuto lungo una 
+        crepa già nota come "Halloween Crack", monitorata sin dal 2016. 
+        Quando si è staccato, A-68A era il secondo iceberg più grande mai 
+        osservato da satellite.
+      </p>
+    </div>
+    <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/07/a-68a_in_open_waters/22127989-1-eng-GB/A-68A_in_open_waters_article.jpg" alt="A-68A in open waters">
+  </div>
 </section>
 
+<div class="divider"></div>
+
+<img class="full-img" src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2021/02/a-68_iceberg_positions_as_seen_by_copernicus_sentinel-3_mission/22536279-1-eng-GB/A-68_iceberg_positions_as_seen_by_Copernicus_Sentinel-3_mission_article.jpg" alt="Sentinel-3 tracking A-68">
+<div class="img-caption">Immagine Copernicus Sentinel-3 — Posizioni dell'iceberg A-68 nell'Oceano Australe — © ESA / Copernicus</div>
+
+<!-- CAUSE -->
 <section id="cause">
-  <h2>Le Cause</h2>
-
-  <div class="content">
-    <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/12/a-68a_s_journey/22545865-1-eng-GB/A-68A_s_journey_pillars.jpg" alt="Percorso A-68">
-
+  <div class="section-label">02 — Cause</div>
+  <h2>Perché si è staccato?</h2>
+  <div class="two-col reverse">
     <div>
+      <h3>Riscaldamento climatico</h3>
       <p>
-        Lo stacco dell’iceberg è stato causato dal fenomeno chiamato
-        <strong>calving</strong>, cioè il distacco naturale di enormi masse di ghiaccio.
+        La causa principale è il <strong style="color:var(--ice)">riscaldamento globale</strong>. 
+        L'Antartide sta subendo un innalzamento delle temperature dell'aria e dell'acqua 
+        significativamente superiore alla media mondiale. 
+        La Penisola Antartica è una delle regioni che si riscalda più rapidamente sul pianeta.
       </p>
-
+      <h3 style="margin-top:1.5rem">Instabilità della piattaforma Larsen C</h3>
       <p>
-        Tuttavia, il riscaldamento globale e l’aumento delle temperature
-        stanno accelerando lo scioglimento delle piattaforme glaciali.
+        La piattaforma Larsen C è una lingua di ghiaccio galleggiante. 
+        Le acque oceaniche più calde erodono il ghiaccio dal basso, mentre 
+        l'aria calda lo scioglie dall'alto. Questo ha indebolito 
+        progressivamente la struttura fino alla formazione della crepa che 
+        ha portato al distacco.
       </p>
-
-      <ul>
-        <li>Aumento della temperatura degli oceani</li>
-        <li>Scioglimento dei ghiacci polari</li>
-        <li>Indebolimento della piattaforma Larsen C</li>
-        <li>Cambiamenti climatici globali</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section id="danni">
-  <h2>Danni Ambientali</h2>
-
-  <div class="content">
-    <div>
+      <h3 style="margin-top:1.5rem">Un processo naturale accelerato</h3>
       <p>
-        Quando A-68A si è avvicinato alla Georgia del Sud,
-        gli scienziati hanno temuto gravi danni agli ecosistemi marini.
-      </p>
-
-      <ul>
-        <li>Possibile distruzione dei fondali marini</li>
-        <li>Alterazione delle correnti oceaniche</li>
-        <li>Rilascio enorme di acqua dolce fredda</li>
-        <li>Pericolo per fauna marina e pesca</li>
-      </ul>
-
-      <p>
-        Secondo ESA, l’iceberg ha rilasciato circa
-        <strong>152 miliardi di tonnellate di acqua dolce</strong>
-        nell’oceano.
+        Il <em>calving</em> degli iceberg è un fenomeno naturale, ma 
+        la frequenza e le dimensioni degli eventi recenti suggeriscono 
+        un'accelerazione legata ai cambiamenti climatici antropogenici.
+        Dopo il distacco di A-68, la piattaforma Larsen C ha perso il 
+        12% della sua superficie totale.
       </p>
     </div>
-
-    <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/12/a-68a_iceberg_breaks_off/22529381-1-eng-GB/A-68A_iceberg_breaks_off_pillars.jpg" alt="Frammentazione iceberg">
+    <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/11/a-68a_on_the_move/22355802-1-eng-GB/A-68A_on_the_move_article.jpg" alt="A-68A in movimento">
   </div>
+
+  <blockquote>
+    "Il distacco di A-68 non è di per sé la prova del cambiamento climatico, 
+    ma la velocità con cui eventi di questa portata si stanno moltiplicando 
+    è coerente con le previsioni dei modelli climatici."
+    <br><br><small style="font-size:0.75rem; font-family:'DM Sans'; font-style:normal; color:var(--muted)">— Ricercatori ESA / Copernicus</small>
+  </blockquote>
 </section>
 
-<section id="vittime">
-  <h2>Vittime Umane e Animali</h2>
-
-  <div class="content">
-    <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/11/iceberg_a-68a_hit_or_miss/22453506-1-eng-GB/Iceberg_A-68A_hit_or_miss_pillars.jpg" alt="A68 vicino Georgia del Sud">
-
-    <div>
-      <p>
-        Non ci sono state vittime umane dirette,
-        ma gli animali della Georgia del Sud erano in grave pericolo.
-      </p>
-
-      <p>
-        Le specie più minacciate erano:
-      </p>
-
-      <ul>
-        <li>Pinguini reali</li>
-        <li>Foche</li>
-        <li>Uccelli marini</li>
-        <li>Pesci e organismi dei fondali</li>
-      </ul>
-
-      <p>
-        Se l’iceberg si fosse bloccato vicino alla costa,
-        avrebbe potuto impedire agli animali di raggiungere il mare per nutrirsi.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section id="effetti">
-  <h2>Effetti sul Pianeta</h2>
-
-  <div class="content">
-    <div>
-      <p>
-        L’evento A-68 è diventato un simbolo visibile della crisi climatica.
-      </p>
-
-      <ul>
-        <li>Accelerazione dello scioglimento polare</li>
-        <li>Innalzamento del livello del mare</li>
-        <li>Squilibrio degli ecosistemi oceanici</li>
-        <li>Aumento degli eventi climatici estremi</li>
-      </ul>
-
-      <p>
-        Gli scienziati usano questi eventi per capire meglio
-        come il cambiamento climatico influenzerà il futuro della Terra.
-      </p>
-    </div>
-
-    <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2021/2/a-68_on_1_february/22885174-1-eng-GB/A-68_on_1_February_pillars.jpg" alt="A68 febbraio 2021">
-  </div>
-</section>
-
-<section id="cronologia">
-  <h2>Cronologia dell'A-68</h2>
+<!-- IL VIAGGIO -->
+<section id="viaggio">
+  <div class="section-label">03 — Il viaggio</div>
+  <h2>4 anni attraverso l'Oceano Australe</h2>
+  <p style="margin-bottom:3rem">
+    Dopo il distacco, A-68A ha intrapreso un lungo viaggio trascinato 
+    dalle correnti oceaniche antartiche, monitorato continuamente dai satelliti ESA.
+  </p>
 
   <div class="timeline">
-
-    <div>
-      <h3>2017</h3>
-      <p>
-        L’iceberg A-68 si stacca dalla piattaforma Larsen C in Antartide.
-      </p>
+    <div class="timeline-item">
+      <div class="timeline-date">Luglio 2017</div>
+      <h3>Il distacco</h3>
+      <p>A-68A si separa dalla piattaforma Larsen C. È immediatamente il secondo iceberg più grande mai registrato. Per oltre un anno rimane relativamente vicino alla sua zona di origine.</p>
     </div>
-
-    <div>
-      <h3>2018 - 2019</h3>
-      <p>
-        L’iceberg rimane vicino all’Antartide, rallentato dai ghiacci marini.
-      </p>
+    <div class="timeline-item">
+      <div class="timeline-date">Settembre 2018</div>
+      <h3>Fuga verso il mare aperto</h3>
+      <p>L'iceberg inizia finalmente a muoversi verso acque più aperte. Le correnti lo trascinano verso nord, allontanandolo progressivamente dall'Antartide.</p>
     </div>
-
-    <div>
-      <h3>2020</h3>
-      <p>
-        A-68A entra in mare aperto e si dirige verso la Georgia del Sud.
-      </p>
+    <div class="timeline-item">
+      <div class="timeline-date">Luglio 2020</div>
+      <h3>Nelle acque dell'Atlantico meridionale</h3>
+      <p>I satelliti Copernicus Sentinel-1 documentano A-68A nelle acque aperte vicino alle Isole Orcadi del Sud — circa 1.050 km dalla sua origine. È già molto più piccolo di quando si è staccato.</p>
     </div>
-
-    <div>
-      <h3>Dicembre 2020</h3>
-      <p>
-        L’iceberg si frammenta in più parti e minaccia gli ecosistemi locali.
-      </p>
+    <div class="timeline-item">
+      <div class="timeline-date">Novembre–Dicembre 2020</div>
+      <h3>Rotta di collisione con South Georgia</h3>
+      <p>L'iceberg si avvicina pericolosamente all'isola di South Georgia. Gli scienziati temono una collisione che potrebbe bloccare l'accesso al mare per i pinguini e le foche che vi abitano. L'iceberg ruota su sé stesso in senso orario e perde un grande frammento dalla punta superiore.</p>
     </div>
-
-    <div>
-      <h3>2021</h3>
-      <p>
-        A-68A continua a rompersi fino a dissolversi nell’oceano.
-      </p>
+    <div class="timeline-item">
+      <div class="timeline-date">Gennaio 2021</div>
+      <h3>Frammentazione</h3>
+      <p>Immagini satellitari rivelano che A-68A si è rotto in numerosi frammenti. I pezzi sembrano allontanarsi l'uno dall'altro — segnale che la minaccia immediata per South Georgia si sta riducendo.</p>
     </div>
-
+    <div class="timeline-item">
+      <div class="timeline-date">Febbraio 2021</div>
+      <h3>Fine del viaggio</h3>
+      <p>Un nuovo iceberg, denominato A-68G, si stacca da A-68A. I frammenti si sciolgono rapidamente nelle acque più calde. Il colosso che aveva sfidato il mondo per quattro anni scompare nell'oceano.</p>
+    </div>
   </div>
 </section>
 
-<footer>
-  <p>
-    Presentazione scolastica realizzata usando dati e immagini ESA (European Space Agency).
+<div class="divider"></div>
+
+<img class="full-img" src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2021/02/a-68_on_1_february/22539318-2-eng-GB/A-68_on_1_February_article.jpg" alt="A-68 il 1 febbraio 2021">
+<div class="img-caption">A-68A il 1° febbraio 2021 — Immagine Copernicus Sentinel-1 — © ESA / Copernicus</div>
+
+<!-- DANNI AMBIENTALI -->
+<section id="danni">
+  <div class="section-label">04 — Danni ambientali</div>
+  <h2>Un ecosistema sotto minaccia</h2>
+  <p style="margin-bottom:2rem">
+    L'avvicinamento di A-68A all'isola di South Georgia ha rappresentato una 
+    grave minaccia per uno degli ecosistemi marini più ricchi e fragili del pianeta.
   </p>
 
+  <div class="cards">
+    <div class="card danger">
+      <div class="card-icon">🌊</div>
+      <h3>Acque oceaniche sconvolte</h3>
+      <p>Un iceberg di queste dimensioni rilascia enormi quantità di acqua dolce fredda nell'oceano, alterando la salinità e le correnti locali. Questo disturba i cicli nutritivi che sostengono la vita marina.</p>
+    </div>
+    <div class="card danger">
+      <div class="card-icon">🐟</div>
+      <h3>Fond ali marini soffocati</h3>
+      <p>Se l'iceberg si fosse arenato nei bassifondi intorno a South Georgia, avrebbe letteralmente schiacciato e soffocato gli ecosistemi dei fondali — invertebrati, coralli, spugne — sviluppatisi in secoli di isolamento.</p>
+    </div>
+    <div class="card danger">
+      <div class="card-icon">🧊</div>
+      <h3>Perdita della piattaforma Larsen C</h3>
+      <p>Con il distacco di A-68, la piattaforma Larsen C ha perso il 12% della sua area. Questo espone il ghiacciaio continentale retrostante a un contatto diretto con l'oceano, accelerandone lo scioglimento.</p>
+    </div>
+    <div class="card danger">
+      <div class="card-icon">💧</div>
+      <h3>Innalzamento del livello del mare</h3>
+      <p>Lo scioglimento dei ghiacciai continentali (non di quelli galleggianti come A-68) contribuisce all'innalzamento del mare. Gli esperti stimano che il completo scioglimento di Larsen C potrebbe alzare il livello del mare di circa 10 cm.</p>
+    </div>
+    <div class="card danger">
+      <div class="card-icon">🌡️</div>
+      <h3>Feedback climatico</h3>
+      <p>Il ghiaccio bianco riflette la radiazione solare. Meno ghiaccio significa più oceano scuro che assorbe calore — un ciclo di retroazione positiva che accelera ulteriormente il riscaldamento.</p>
+    </div>
+    <div class="card danger">
+      <div class="card-icon">⚓</div>
+      <h3>Rischi per la navigazione</h3>
+      <p>I frammenti di A-68A, dispersi nell'Oceano Australe e nell'Atlantico meridionale, hanno rappresentato un rischio concreto per la navigazione commerciale e scientifica in quelle acque.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VITTIME -->
+<section id="vittime">
+  <div class="section-label">05 — Vittime</div>
+  <h2>Pinguini, foche e un ecosistema in pericolo</h2>
+  <div class="two-col">
+    <div>
+      <h3>🐧 Pinguini di South Georgia</h3>
+      <p>
+        L'isola di South Georgia ospita milioni di pinguini reali. 
+        Se A-68A si fosse arenato nelle acque costiere, avrebbe bloccato 
+        l'accesso al mare — costringendo i pinguini a percorrere decine di chilometri 
+        in più per nutrirsi. Durante la stagione riproduttiva, questo avrebbe 
+        significato la morte per fame di centinaia di migliaia di pulcini, 
+        incapaci di sopravvivere senza cibo per così tanto tempo.
+      </p>
+      <h3 style="margin-top:1.5rem">🦭 Foche elefante e da pelliccia</h3>
+      <p>
+        South Georgia è anche habitat di numerose colonie di foche. 
+        Come i pinguini, dipendono dall'accesso libero al mare per cacciare. 
+        Un blocco anche temporaneo delle rotte verso l'oceano avrebbe 
+        causato sofferenza e morte, in particolare per i cuccioli e i giovani.
+      </p>
+      <h3 style="margin-top:1.5rem">🐋 Balene e krill</h3>
+      <p>
+        Le acque intorno a South Georgia sono ricchissime di krill — 
+        il crostaceo che sostiene l'intera catena alimentare polare, 
+        dalle balene ai pinguini. L'alterazione delle correnti e della 
+        salinità dovuta al massiccio scioglimento del ghiaccio avrebbe 
+        ridotto la disponibilità di krill, con effetti a cascata sull'intera fauna.
+      </p>
+    </div>
+    <div>
+      <img src="https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2020/11/iceberg_a-68a_hit_or_miss/22347262-5-eng-GB/Iceberg_A-68A_hit_or_miss_article.gif" alt="A-68A avvicinamento South Georgia" style="height:auto">
+      <p style="font-size:0.72rem; margin-top:0.5rem; color:var(--muted)">A-68A in rotta verso South Georgia — © ESA / Copernicus</p>
+    </div>
+  </div>
+
+  <blockquote>
+    "Se l'iceberg si fosse incagliato, milioni di pinguini e foche 
+    avrebbero dovuto compiere percorsi enormemente più lunghi per nutrirsi — 
+    con conseguenze potenzialmente devastanti per la fauna locale."
+    <br><br><small style="font-size:0.75rem; font-family:'DM Sans'; font-style:normal; color:var(--muted)">— BAS, British Antarctic Survey</small>
+  </blockquote>
+
+  <h3 style="margin-top:2rem; color:var(--ice)">Impatto sulle popolazioni umane</h3>
   <p>
-    Fonti:
-    <br>
-    ESA - The A-68 Story
-    <br>
-    Copernicus Sentinel Missions
+    Nessuna vittima umana diretta è stata causata da A-68A. Tuttavia, 
+    le comunità insulari e gli operatori di pesca che dipendono dalle 
+    acque di South Georgia hanno vissuto mesi di incertezza. 
+    Più in generale, il fenomeno è un segnale di allarme per le 
+    popolazioni costiere di tutto il pianeta: lo scioglimento dei ghiacciai 
+    antartici è uno dei principali motori dell'innalzamento del livello del mare 
+    che, nel lungo periodo, minaccia milioni di persone.
   </p>
+</section>
+
+<!-- EFFETTI -->
+<section id="effetti">
+  <div class="section-label">06 — Effetti e conclusioni</div>
+  <h2>Cosa ci ha insegnato A-68</h2>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🛰️</div>
+      <h3>Importanza del monitoraggio satellitare</h3>
+      <p>Il caso A-68 ha dimostrato il valore fondamentale dei satelliti ESA nel tracciare fenomeni estremi. Senza Copernicus Sentinel, non avremmo potuto prevedere la traiettoria e preparare risposte in tempo.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔬</div>
+      <h3>Dati scientifici preziosi</h3>
+      <p>Lo scioglimento di A-68A ha rilasciato nutrienti e acque dolci in quantità eccezionali. Alcuni ricercatori ipotizzano che questo possa aver temporaneamente fertilizzato le acque, favorendo la crescita di fitoplancton.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌍</div>
+      <h3>Un segnale per il clima</h3>
+      <p>A-68 è diventato un simbolo globale del cambiamento climatico. La sua storia ha sensibilizzato milioni di persone sul destino dell'Antartide e delle sue piattaforme glaciali.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚠️</div>
+      <h3>Una minaccia futura</h3>
+      <p>Con il riscaldamento degli oceani, eventi come A-68 diventeranno più frequenti. Gli scienziati stimano che le piattaforme glaciali antartiche potrebbero continuare a ridursi nel corso del 21° secolo.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <p style="font-family:'Playfair Display'; font-size:1.5rem; color:var(--ice); margin-bottom:1rem">Il Movimento dei Ghiacciai</p>
+  <p>Presentazione scolastica — Fonti: <a href="https://www.esa.int/Applications/Observing_the_Earth/The_A-68_story" target="_blank">ESA — The A-68 Story</a></p>
+  <p style="margin-top:0.5rem">Immagini © ESA / Copernicus Sentinel — usate a scopo educativo</p>
 </footer>
 
 </body>
